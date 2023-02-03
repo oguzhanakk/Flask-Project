@@ -4,10 +4,12 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    sayi = 10
-    sayi2 = 20
+    article = dict()
+    article["title"] = "Deneme"
+    article["body"] = "Deneme 123"
+    article["author"] = "Mustafa Murat"
     
-    return render_template("index.html", number=sayi, number2=sayi2)
+    return render_template("index.html",article=article)
 
 if __name__ == "__main__":
     app.run(debug=True)
