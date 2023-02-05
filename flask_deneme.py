@@ -32,9 +32,15 @@ def index():
 def about():
     return render_template("about.html")
 
-@app.route("/article/<string:id>")
-def detail(id):
-    return "Article Id:" + id
+#Kayıt Olma
+@app.route("/register",methods = ["GET","POST"])
+def register():
+    form = RegisterForm(request.form)
+    
+    if request.method == "POST":
+        return redirect(url_for("index"))
+    else:
+        return render_template("register.html",form = form)
 
 if __name__ == "__main__":
     app.run(debug=True)
