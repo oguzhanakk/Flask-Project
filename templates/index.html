@@ -6,4 +6,10 @@
     <p> Bu blog oguzhan akkoyunlu tarafindan yapilmistir. </p>
 </div>
 
+{% if answer == "evet" %}
+<p>Cevabimiz Evettir.</p>
+{% else %}
+<p>Cevabimiz Evet degildir.</p>
+{% endif %}
+
 {% endblock %}
