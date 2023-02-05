@@ -4,14 +4,15 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    numbers = [1,2,3,4,5]
-    
-    return render_template("index.html",numbers=numbers)
+    return render_template("index.html")
 
 @app.route("/about")
 def about():
     return render_template("about.html")
 
+@app.route("/article/<string:id>")
+def detail(id):
+    return "Article Id:" + id
 
 if __name__ == "__main__":
     app.run(debug=True)
