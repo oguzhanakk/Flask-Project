@@ -49,6 +49,21 @@ def index():
 def about():
     return render_template("about.html")
 
+@app.route("/articles")
+def articles():
+    cursor = mysql.connection.cursor()
+    
+    sorgu = "Select * from articles"
+    
+    result = cursor.execute(sorgu)
+
+    if (result > 0):
+        articles = cursor.fetchall()
+        
+        return render_template("articles.html",articles = articles)
+    else:
+        return render_template("articles.html")
+
 @app.route("/dashboard")
 @login_required
 def dashboard():
@@ -126,7 +141,24 @@ def logout():
 def addarticle():
     form = ArticleForm(request.form)
     
-    return render_template("addarticle.html",form = form)
+    if request.method == "POST" and form.validate():
+        title = form.title.data
+        content = form.content.data
+        
+        cursor = mysql.connection.cursor()
+        
+        sorgu = "Insert into articles (title,author,content) VALUES (%s,%s,%s)"
+    
+        cursor.execute(sorgu,(title,session["username"],content))
+        
+        mysql.connection.commit()
+        cursor.close()
+        
+        flash("Makale Başariyla Eklendi","success")
+        return redirect(url_for("dashboard"))
+    
+    else:
+        return render_template("addarticle.html",form = form)
 # Makale Form
 class ArticleForm(Form):
     title = StringField("Makale Başlığı", validators=[validators.Length(min = 5, max = 100)])
