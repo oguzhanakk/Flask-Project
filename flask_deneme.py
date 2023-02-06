@@ -148,6 +148,19 @@ def logout():
     session.clear()
     return redirect(url_for("index"))
 
+# Detay Sayfası
+@app.route("/article/<string:id>")
+def article(id):
+    cursor = mysql.connection.cursor()
+    sorgu = "Select * from articles where id = %s"
+    result = cursor.execute(sorgu,(id,))
+    
+    if (result>0):
+        article = cursor.fetchone()
+        return render_template("article.html",article=article)
+    else:
+        return render_template("article.html")
+
 # Makale Ekleme
 @app.route("/addarticle",methods = ["GET","POST"])
 def addarticle():
