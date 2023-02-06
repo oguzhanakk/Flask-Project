@@ -241,7 +241,27 @@ def update(id):
 class ArticleForm(Form):
     title = StringField("Makale Başlığı", validators=[validators.Length(min = 5, max = 100)])
     content = TextAreaField("Makale İçeriği",validators=[validators.Length(min = 10)])
-    
+
+# Arama URL
+@app.route("/search",methods = ["GET","POST"])
+def search():
+    # GET REQUEST
+    if (request.method == "GET"):
+        return redirect(url_for("index"))
+    # POST REQUEST
+    else:
+        keyword = request.form.get("keyword")
+        
+        cursor = mysql.connection.cursor()
+        sorgu = "Select * from articles where title like '%" + keyword + "%' "
+        result = cursor.execute(sorgu)
+        
+        if (result == 0):
+            flash("Aranan kelimeye uygun makale bulunamadi..","warning")
+            return redirect(url_for("articles"))
+        else:
+            articles = cursor.fetchall()
+            return render_template("articles.html",articles=articles)
 
 if __name__ == "__main__":
     app.run(debug=True)
