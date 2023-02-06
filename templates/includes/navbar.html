@@ -15,9 +15,17 @@
       </ul>
 
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="/login">Giris yap</a>
-        </li>
+
+        {% if session["logged_in"] %}
+          <li class="nav-item active">
+            <a class="nav-link" href="/logout">Çıkış yap</a>
+          </li>
+        {% else %}
+          <li class="nav-item active">
+            <a class="nav-link" href="/login">Giris yap</a>
+          </li>
+        {% endif %}
+
         <li class="nav-item active">
           <a class="nav-link" href="/register">Kayıt olun</a>
         </li>
