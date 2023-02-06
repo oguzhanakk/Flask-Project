@@ -2,6 +2,18 @@ from flask import Flask, render_template, flash, redirect, url_for, session, log
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
+from functools import wraps
+
+# Kullanıcı Giriş Decorator'ı
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "logged_in" in session:
+            return f(*args, **kwargs)
+        else:
+            flash("Bu sayfayi görüntülümek icin lütfen giris yapin.","danger")
+            return redirect(url_for("login"))
+    return decorated_function
 
 # Kullanıcı Kayıt Formu
 class RegisterForm(Form):
@@ -37,8 +49,8 @@ def index():
 def about():
     return render_template("about.html")
 
-#Dashboard Olusturulmasi
 @app.route("/dashboard")
+@login_required
 def dashboard():
     return render_template("dashboard.html")
 
@@ -89,6 +101,7 @@ def login():
             if sha256_crypt.verify(password_entered,real_password):
                 flash("Basariyla giris yaptiniz...","success")
                 
+                #Session islemi
                 session["logged_in"] = True
                 session["username"] = username
                 
