@@ -14,6 +14,10 @@ class RegisterForm(Form):
     ])
     confirm = PasswordField("Parola Dogrula")
 
+class LoginForm(Form):
+    username = StringField("Kullanici Adi")
+    password = PasswordField("Parola")
+
 app = Flask(__name__)
 app.secret_key= "ybblog"
 
@@ -55,9 +59,40 @@ def register():
         
         flash("Basariyla kayit oldunuz...","success")
         
-        return redirect(url_for("index"))
+        return redirect(url_for("login"))
     else:
         return render_template("register.html",form = form)
+    
+#Login Islemi
+@app.route("/login",methods = ["GET","POST"])
+def login():
+    form = LoginForm(request.form)
+    
+    if request.method == "POST":
+        username = form.username.data
+        password_entered = form.password.data
+    
+        cursor = mysql.connection.cursor()
+        
+        sorgu = "Select * From users where username = %s"
+        
+        result = cursor.execute(sorgu, (username,))
+    
+        if result > 0:
+            data = cursor.fetchone()
+            real_password = data["password"]
+            if sha256_crypt.verify(password_entered,real_password):
+                flash("Basariyla giris yaptiniz...","success")
+                return redirect(url_for("index"))
+            else:
+                flash("Sifrenizi yalnis girdiniz...","danger")
+                return redirect(url_for("login"))
+        else:
+            flash("Böyle bir kullanici bulunmuyor...","danger")
+            return redirect(url_for("login"))
+    
+    return render_template("login.html",form = form)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
