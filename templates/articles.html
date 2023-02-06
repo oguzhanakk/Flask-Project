@@ -6,13 +6,14 @@
 
 {% if articles %}
 
-<ul class="list-group">
+  <ul class="list-group">
     {% for article in articles %}
     <li class = "list-group-item">{{ article.title }}</li>
     {% endfor %}
   </ul>
 
 {% else %}
-<div> class = "alert alert-danger">Bu blokta henüz makale bulunmuyor...</div>
+  <div class = "alert alert-danger">Bu blokta henüz makale bulunmuyor...</div>
+{% endif %}
 
-{% endblocak body %}
+{% endblock body %}
