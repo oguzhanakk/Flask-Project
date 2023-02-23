@@ -5,11 +5,7 @@ Each project has its own README file, which contains information about the purpo
 
 # Requirements
 To run this project, you will need to have the following software requirements:
-
-• scrapy
-• postgre
-• pandas
-• flask
+    • You can see it in the requirements.txt inside the project.
 
 # Setup
 To run this project on your own computer, follow these steps:
